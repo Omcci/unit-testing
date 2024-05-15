@@ -16,3 +16,7 @@ export function isOrderExpensive(articles: Article[]): boolean {
     return acc + article.price * article.quantity;
   }, 0) > 10000;
 }
+
+export function freeShippingCost(articles: Article[]): number {
+  return isOrderExpensive(articles) ? 0 : getShippingCost(articles);
+}

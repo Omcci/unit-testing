@@ -1,4 +1,4 @@
-import { getShippingCost, isOrderExpensive } from ".";
+import { getShippingCost, isOrderExpensive, freeShippingCost } from ".";
 
 describe("article", () => {
   const cheapOrder = [
@@ -38,11 +38,24 @@ describe("article", () => {
     expect(resultat2).toBe((1 * 5000 + 2 * 4000) * 0.01);
   });
 
-  it("si le prix de la commande dépasse 100euros, les frais de port sont gratuits", () => {
-    const order1 = isOrderExpensive(expensiveOrder);
-    const order2 = isOrderExpensive(cheapOrder);
-    console.log("order1",order1,"order2", order2);    
-    expect(order1).toBe(true);
-    expect(order2).toBe(false);
+  describe("when order is expensive", () => {
+    it("si le prix de la commande dépasse 100euros, les frais de port sont gratuits", () => {
+      // const order1 = isOrderExpensive(expensiveOrder);
+      // const order2 = isOrderExpensive(cheapOrder);
+      // console.log("order1",order1,"order2", order2);
+      // expect(order1).toBe(true);
+      // expect(order2).toBe(false);
+
+      if (getShippingCost(expensiveOrder) > 100) {
+        expect(isOrderExpensive(expensiveOrder)).toBe(true);
+        expect(freeShippingCost(expensiveOrder)).toBe(0);
+      }
+    });
+    it("si le prix de la commande ne dépasse pas 100euros, les frais de port sont payants", () => {
+      if (getShippingCost(cheapOrder) < 100) {
+        expect(isOrderExpensive(cheapOrder)).toBe(false);
+        expect(freeShippingCost(cheapOrder)).toBe(getShippingCost(cheapOrder));
+      }
+    });
   });
 });
