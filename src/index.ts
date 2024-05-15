@@ -11,7 +11,7 @@ export function getShippingCost(articles: Article[]): number {
   }, 0);
 }
 
-export function FreeShippingCost(articles: Article[]): boolean {
+export function isOrderExpensive(articles: Article[]): boolean {
   return articles.reduce((acc, article) => {
     return acc + article.price * article.quantity;
   }, 0) > 10000;

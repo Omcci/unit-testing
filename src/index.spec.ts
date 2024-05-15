@@ -1,7 +1,7 @@
-import { FreeShippingCost, getShippingCost } from ".";
+import { getShippingCost, isOrderExpensive } from ".";
 
 describe("article", () => {
-  const articles = [
+  const cheapOrder = [
     {
       name: "article1",
       price: 1000,
@@ -16,7 +16,7 @@ describe("article", () => {
     },
   ];
 
-  const expensiveArticles = [
+  const expensiveOrder = [
     {
       name: "article1",
       price: 20000,
@@ -31,16 +31,18 @@ describe("article", () => {
     },
   ];
   it("frais de port : 10 euros par kilogramme du poids total", () => {
-    const resultat = getShippingCost(articles);
-    const resultat2 = getShippingCost(expensiveArticles);
+    const resultat = getShippingCost(cheapOrder);
+    const resultat2 = getShippingCost(expensiveOrder);
+    console.log("resultat", resultat, "resultat2", resultat2);
     expect(resultat).toBe((1 * 1000 + 2 * 2000) * 0.01);
     expect(resultat2).toBe((1 * 5000 + 2 * 4000) * 0.01);
   });
 
   it("si le prix de la commande dépasse 100euros, les frais de port sont gratuits", () => {
-    const freeShipping = FreeShippingCost(expensiveArticles);
-    const notFreeShipping = FreeShippingCost(articles);
-    expect(freeShipping).toBe(true);
-    expect(notFreeShipping).toBe(false);
+    const order1 = isOrderExpensive(expensiveOrder);
+    const order2 = isOrderExpensive(cheapOrder);
+    console.log("order1",order1,"order2", order2);    
+    expect(order1).toBe(true);
+    expect(order2).toBe(false);
   });
 });
