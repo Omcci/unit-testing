@@ -6,6 +6,13 @@ type Article = {
 };
 
 export function getShippingCost(articles: Article[]): number {
-  // frais de port : 10 euros par kilogramme du poids total
-  return 0;
+  return articles.reduce((acc, article) => {
+    return acc + article.weightG * article.quantity * 0.01;
+  }, 0);
+}
+
+export function FreeShippingCost(articles: Article[]): boolean {
+  return articles.reduce((acc, article) => {
+    return acc + article.price * article.quantity;
+  }, 0) > 10000;
 }
